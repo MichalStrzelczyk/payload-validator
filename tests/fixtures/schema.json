@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "$filters": "myFilter",
+  "properties": {
+    "age": {
+      "type": "integer",
+      "default": 0,
+      "minimum": 18,
+      "maximum": 99,
+      "sanitizers": [
+        "ToInteger"
+      ],
+      "errorMessages": {
+        "type": {
+          "2000": "Parameter `age` should be numerical"
+        },
+        "minimum": {
+          "2001": "Minimum `age` is 18"
+        },
+        "maximum": {
+          "2002": "Maximum `age` is 99"
+        }
+      }
+    }
+  },
+  "required": [
+    "age"
+  ]
+}
