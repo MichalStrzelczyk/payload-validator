@@ -1,0 +1,23 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+    - name: PHP Lint
+      uses: michaelw90/PHP-Lint@1.0.0
+    - name: PHPUnit (php-actions)
+      uses: php-actions/phpunit@v1.0.0
+      with:
+        # Configuration file location
+        config: ./phpunit.xml
+                     
