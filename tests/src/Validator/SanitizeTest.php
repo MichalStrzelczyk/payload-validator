@@ -24,8 +24,8 @@ final class SanitizeTest extends TestCase
      */
     public function testSanitizeMethod($testData, $expectedData): void
     {
-        $dataAfterSanitiziting = $this->validator->sanitize($testData, $this->schema);
-        $this->assertEquals(\serialize($expectedData), \serialize($dataAfterSanitiziting));
+        $dataAfterSanitiziting = $this->validator->sanitize((object) $testData, $this->schema);
+        $this->assertEquals(\serialize((object) $expectedData), \serialize($dataAfterSanitiziting));
     }
 
     /**

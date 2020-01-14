@@ -35,7 +35,7 @@ class Validator extends \Opis\JsonSchema\Validator
         int $max_errors = 1,
         ISchemaLoader $loader = null
     ): ValidationResult {
-        $data = (object)$this->sanitize((array)$data, $schema);
+        $this->sanitize($data, $schema);
         $bug = parent::schemaValidation($data, $schema, $max_errors, $loader);
 
         $this->errorContainer = [];
@@ -50,7 +50,14 @@ class Validator extends \Opis\JsonSchema\Validator
                     $name = $error->dataPointer()[0];
                 }
 
-                $fieldError = (array)$schema->resolve()->properties->{$name}->errorMessages->{$error->keyword()};
+                if (isset($schema->resolve()->properties->{$name})) {
+                    $fieldError = (array)$schema->resolve()->properties->{$name}->errorMessages->{$error->keyword()};
+                } else {
+                    // Field is marked as a required but is not defined
+                    $fieldError = [
+                        $error->keyword() => $name
+                    ];
+                }
                 $this->errorContainer += $fieldError;
             }
         }
@@ -64,9 +71,11 @@ class Validator extends \Opis\JsonSchema\Validator
      *
      * @return array
      */
-    public function sanitize(array $requestParameters, ISchema $schema): array
+    public function sanitize($requestParameters, ISchema $schema): object
     {
-        foreach ($requestParameters as $key => $keyData) {
+        $properties = \get_object_vars($requestParameters);
+
+        foreach ($properties as $key => $keyData) {
             $sanitizers = $schema->resolve()->properties->{$key}->sanitizers ?? [];
             if (!\is_array($sanitizers) || \count($sanitizers) === 0) {
                 continue;
@@ -81,7 +90,7 @@ class Validator extends \Opis\JsonSchema\Validator
                     throw new \RuntimeException('Class: ' . $sanitizerClassName . ' doesn\'t exist');
                 }
 
-                $requestParameters[$key] = \call_user_func_array([$sanitizerClassName, "sanitize"], [$keyData]);
+                $requestParameters->{$key} = \call_user_func_array([$sanitizerClassName, "sanitize"], [$keyData]);
             }
         }
 
