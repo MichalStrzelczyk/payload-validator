@@ -1,6 +1,6 @@
 # Payload Validator Library
 
-This library is an extension for the `opis/json-schema` package. The idea is to create one json standard file for 
+This library is an extension for the `opis/json-schema` package. The idea is to create one json standard for 
 sanitizing and validation http request payloads. Moreover this package has two very useful features:
 - The ability to define error message for each of the validator
 - The ability to define sanitizers for each of variable
@@ -94,7 +94,7 @@ should add `errorMessages` key in your schema like this:
 }
 ```
 
-**CAUTION** Matching an error to a custom error message is by a validator criteria key. The same keys should be defined
+**CAUTION** Matching an error to a custom error message using a validator criteria key. The same keys should be defined
 into `errorMessages` section.
 
 After validation you have an access to the error container in the Validator object. This array has all error 
