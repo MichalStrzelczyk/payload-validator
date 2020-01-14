@@ -94,7 +94,10 @@ should add `errorMessages` key in your schema like this:
 }
 ```
 
-After validation you will have an access to the error container in the Validator object. This array has all error 
+**CAUTION** Matching an error to a custom error message is by a validator criteria key. The same keys should be defined
+into `errorMessages` section.
+
+After validation you have an access to the error container in the Validator object. This array has all error 
 messages.
 
 Usage:
