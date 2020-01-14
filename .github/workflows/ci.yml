@@ -15,4 +15,4 @@ jobs:
       uses: php-actions/phpunit@v1.0.0
       with:
         # Configuration file location
-        config: phpunit.xml
+        config: /github/workspace/phpunit.xml
