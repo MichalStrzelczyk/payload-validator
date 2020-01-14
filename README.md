@@ -12,7 +12,7 @@ Important links:
 ## Installation
 
 ```
-    composer install 
+composer install miinto/payload_validator
 ```
 
 ## Usage
@@ -23,39 +23,40 @@ As you know all query parameters are assigned as a string type. We are not able 
 basic validators from the `opis/json-schema` library. To do this you need to add `sanitizers` section in the json 
 schema. All these sanitizers will be run before validation in the same order as we defined in json array. 
 
+```json
+{
+  "type": "object",      
+  "properties": {
+    "age": {
+      "type": "integer",
+      "default": 0,
+      "minimum": 18,
+      "maximum": 99,
+      "sanitizers": [
+        "toInteger"
+      ]
+      }
+    }
+  }          
 ```
-    {
-      "type": "object",      
-      "properties": {
-        "age": {
-          "type": "integer",
-          "default": 0,
-          "minimum": 18,
-          "maximum": 99,
-          "sanitizers": [
-            "ToInteger"
-          ],
-          }
-        }
-      }      
-    } 
-```
+
+**CAUTION** Sanitizer names are case sensitive 
+
 If you need to define your custom sanitizer, you can do this by adding a class path in the `sanitizers` section. This 
 class must implement `\PayloadValidator\Sanitizer\SanitizerInterface`.
-```
-    {
-      "type": "object",      
-      "properties": {
-        "age": {
-          "type": "integer",          
-          "sanitizers": [
-            "ToInteger",
-            "\This\Is\Path\To\My\SanitizerClass"
-          ],
-          }
-        }
-      }      
-    } 
+```json
+{
+  "type": "object",      
+  "properties": {
+    "age": {
+      "type": "integer",          
+      "sanitizers": [
+        "toInteger",
+        "\This\Is\Path\To\My\SanitizerClass"
+      ]
+      }
+    }
+}         
 ```
 
 ### 2. Error messages customization
@@ -63,7 +64,7 @@ class must implement `\PayloadValidator\Sanitizer\SanitizerInterface`.
 One variable can assign many validators and for each of them you can define a custom error message. To do this you 
 should add `errorMessages` key in your schema like this:
 
-```
+```json
 {
   "type": "object",  
   "properties": {
@@ -102,17 +103,17 @@ messages.
 
 Usage:
 
-```                
-        $testData = ['age' => '15'];
-        $schema = (new \PayloadValidator\Schema\Factory())->createFromArray($schemaAsArray);
-        $validator = (new \PayloadValidator\Validator\Factory())->create();
-        $validator->schemaValidation((object) $testData, $this->schema);
-        $errors = $validator->getErrorContainer();
+```php                
+$testData = ['age' => '15'];
+$schema = (new \PayloadValidator\Schema\Factory())->createFromArray($schemaAsArray);
+$validator = (new \PayloadValidator\Validator\Factory())->create();
+$validator->schemaValidation((object) $testData, $this->schema);
+$errors = $validator->getErrorContainer();
 
-        // var_dump($errors);
-        // will return:
-        //
-        // [
-        //    '2001' => 'Minimum `age` is 18'
-        // ]
+// var_dump($errors);
+// will return:
+//
+// [
+//    '2001' => 'Minimum `age` is 18'
+// ]
 ```

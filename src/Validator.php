@@ -75,7 +75,11 @@ class Validator extends \Opis\JsonSchema\Validator
             foreach ($sanitizers as $sanitizerName) {
                 $sanitizerClassName = (\class_exists(
                     $sanitizerName
-                )) ? $sanitizerName : '\PayloadValidator\Sanitizer\\' . $sanitizerName;
+                )) ? $sanitizerName : '\PayloadValidator\Sanitizer\\' . \ucfirst($sanitizerName);
+
+                if (!\class_exists($sanitizerClassName)) {
+                    throw new \RuntimeException('Class: '. $sanitizerClassName . ' doesn\'t exist');
+                }
 
                 $requestParameters[$key] = \call_user_func_array([$sanitizerClassName, "sanitize"], [$keyData]);
             }
