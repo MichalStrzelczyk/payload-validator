@@ -67,11 +67,7 @@ class Validator extends \Opis\JsonSchema\Validator
     public function sanitize(array $requestParameters, ISchema $schema): array
     {
         foreach ($requestParameters as $key => $keyData) {
-            if (!isset($schema->resolve()->properties->{$key})) {
-                continue;
-            }
-
-            $sanitizers = $schema->resolve()->properties->{$key}->sanitizers;
+            $sanitizers = $schema->resolve()->properties->{$key}->sanitizers ?? [];
             if (!\is_array($sanitizers) || \count($sanitizers) === 0) {
                 continue;
             }
