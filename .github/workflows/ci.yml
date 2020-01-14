@@ -11,3 +11,5 @@ jobs:
       with:
         # Folder to check syntax
         dir: .
+    - name: composer-normalize-action
+      uses: ergebnis/composer-normalize-action@0.7.0
