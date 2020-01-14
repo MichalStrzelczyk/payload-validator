@@ -52,7 +52,7 @@ class must implement `\PayloadValidator\Sanitizer\SanitizerInterface`.
       "type": "integer",          
       "sanitizers": [
         "toInteger",
-        "\This\Is\Path\To\My\SanitizerClass"
+        "\\This\\Is\\Path\\To\\My\\SanitizerClass"
       ]
       }
     }
