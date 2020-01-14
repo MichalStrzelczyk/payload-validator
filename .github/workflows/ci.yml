@@ -13,6 +13,3 @@ jobs:
         dir: .
     - name: PHPUnit (php-actions)
       uses: php-actions/phpunit@v1.0.0
-      with:
-        # Configuration file location
-        config: ./phpunit.xml
