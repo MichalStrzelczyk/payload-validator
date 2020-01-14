@@ -74,7 +74,7 @@ should add `errorMessages` key in your schema like this:
       "minimum": 18,
       "maximum": 99,
       "sanitizers": [
-        "ToInteger"
+        "toInteger"
       ],
       "errorMessages": {
         "type": {

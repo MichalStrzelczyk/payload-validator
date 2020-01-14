@@ -35,7 +35,7 @@ class Validator extends \Opis\JsonSchema\Validator
         int $max_errors = 1,
         ISchemaLoader $loader = null
     ): ValidationResult {
-        $data = (object) $this->sanitize((array) $data, $schema);
+        $data = (object)$this->sanitize((array)$data, $schema);
         $bug = parent::schemaValidation($data, $schema, $max_errors, $loader);
 
         $this->errorContainer = [];
@@ -78,7 +78,7 @@ class Validator extends \Opis\JsonSchema\Validator
                 )) ? $sanitizerName : '\PayloadValidator\Sanitizer\\' . \ucfirst($sanitizerName);
 
                 if (!\class_exists($sanitizerClassName)) {
-                    throw new \RuntimeException('Class: '. $sanitizerClassName . ' doesn\'t exist');
+                    throw new \RuntimeException('Class: ' . $sanitizerClassName . ' doesn\'t exist');
                 }
 
                 $requestParameters[$key] = \call_user_func_array([$sanitizerClassName, "sanitize"], [$keyData]);
