@@ -2,9 +2,9 @@
 
 declare (strict_types=1);
 
-namespace PayloadValidator\Validator;
+namespace Miinto\PayloadValidator\Validator;
 
-use \PayloadValidator\Validator;
+use \Miinto\PayloadValidator\Validator;
 
 class Factory
 {

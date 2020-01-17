@@ -11,7 +11,7 @@ final class ToIntegerTest extends TestCase
      */
     public function testToInt($dataProvider): void
     {
-        $this->assertEquals(1 , \PayloadValidator\Sanitizer\ToInteger::sanitize($dataProvider));
+        $this->assertEquals(1, \Miinto\PayloadValidator\Sanitizer\ToInteger::sanitize($dataProvider));
     }
 
     /**
@@ -20,7 +20,9 @@ final class ToIntegerTest extends TestCase
     public function data()
     {
         return [
-            [1, "1", '1',1.1, 1.6,  "true",'true',true, "notEmptyString"]
+            [1],
+            ["1"],
+            ['1']
         ];
     }
 }

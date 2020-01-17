@@ -1,17 +1,16 @@
 {
-  "name": "arrow/payload_validator",
+  "name": "miinto/payload-validator",
   "description": "Payload validator",
   "autoload": {
     "psr-4": {
-      "PayloadValidator\\": "src/"
+      "Miinto\\PayloadValidator\\": "src/"
     }
   },
   "require": {
     "php": "^7.2",
-    "ext-phalcon": "^4.0",
     "opis/json-schema": "^1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^8"
+    "phpunit/phpunit": "^8.5"
   }
 }

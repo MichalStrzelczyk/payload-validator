@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SchemaFactoryTest extends TestCase
 {
-    /** @var \PayloadValidator\Schema\Factory  */
+    /** @var \Miinto\PayloadValidator\Schema\Factory  */
     protected $factory;
 
     /** @var array */
@@ -14,7 +14,7 @@ final class SchemaFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $this->factory = new \PayloadValidator\Schema\Factory();
+        $this->factory = new \Miinto\PayloadValidator\Schema\Factory();
         $this->schema = \json_decode(\file_get_contents(FIXTURES_PATH . '/schema.json'), true);
     }
 

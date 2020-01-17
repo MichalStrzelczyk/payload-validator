@@ -2,7 +2,7 @@
 
 declare (strict_types=1);
 
-namespace PayloadValidator\Sanitizer;
+namespace Miinto\PayloadValidator\Sanitizer;
 
 interface SanitizerInterface
 {

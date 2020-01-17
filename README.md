@@ -78,13 +78,16 @@ should add `errorMessages` key in your schema like this:
       ],
       "errorMessages": {
         "type": {
-          "2000": "Parameter `age` should be numerical"
+          "code": 2000,
+          "message": "Parameter `age` should be numerical"
         },
         "minimum": {
-          "2001": "Minimum `age` is 18"
+          "code": 2001,
+          "message": "Minimum `age` is 18"
         },
         "maximum": {
-          "2002": "Maximum `age` is 99"
+          "code": 2002,
+          "message": "Maximum `age` is 99"
         }
       }
     }
@@ -114,6 +117,9 @@ $errors = $validator->getErrorContainer();
 // will return:
 //
 // [
-//    '2001' => 'Minimum `age` is 18'
+//    [
+//      'code' => '2001',
+//      'message' => 'Minimum `age` is 18'
+//    ]
 // ]
 ```

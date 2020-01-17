@@ -2,7 +2,7 @@
 
 declare (strict_types=1);
 
-namespace PayloadValidator\Sanitizer;
+namespace Miinto\PayloadValidator\Sanitizer;
 
 class ToInteger implements SanitizerInterface
 {
@@ -13,6 +13,6 @@ class ToInteger implements SanitizerInterface
      */
     public static function sanitize($value)
     {
-        return (int) $value;
+        return \filter_var($value, FILTER_VALIDATE_INT);
     }
 }

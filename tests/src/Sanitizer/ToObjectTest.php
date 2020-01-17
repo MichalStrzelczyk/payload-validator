@@ -11,7 +11,7 @@ final class ToObjectTest extends TestCase
      */
     public function testToObject($data, $expected): void
     {
-        $this->assertEquals($expected , \PayloadValidator\Sanitizer\ToObject::sanitize($data));
+        $this->assertEquals($expected, \Miinto\PayloadValidator\Sanitizer\ToObject::sanitize($data));
     }
 
     /**

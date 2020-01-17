@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SchemaValidationTest extends TestCase
 {
-    /** @var \PayloadValidator\Validator */
+    /** @var \Miinto\PayloadValidator\Validator */
     protected $validator;
 
     /** @var \Opis\JsonSchema\ISchema */
@@ -14,9 +14,9 @@ final class SchemaValidationTest extends TestCase
 
     public function setUp(): void
     {
-        $this->validator = (new \PayloadValidator\Validator\Factory())->create();
+        $this->validator = (new \Miinto\PayloadValidator\Validator\Factory())->create();
         $schema = \json_decode(\file_get_contents(FIXTURES_PATH . '/schema.json'), true);
-        $this->schema = (new \PayloadValidator\Schema\Factory())->createFromArray($schema);
+        $this->schema = (new \Miinto\PayloadValidator\Schema\Factory())->createFromArray($schema);
     }
 
     /**
@@ -64,19 +64,19 @@ final class SchemaValidationTest extends TestCase
     {
         return [
             [
-                ['age' => 17.999999999999],['2001' => "Minimum `age` is 18"]
+                ['age' => 17.999999999999],[['code' => 2000, 'message' => "Parameter `age` should be numerical", 'key' => 'age']]
             ],
             [
-                ['age' => '-18'],['2001' => "Minimum `age` is 18"]
+                ['age' => '17.999999999999'],[['code' => 2000, 'message' => "Parameter `age` should be numerical", 'key' => 'age']]
             ],
             [
-                ['age' => '17'],['2001' => "Minimum `age` is 18"]
+                ['age' => '-18'],[['code' => 2000, 'message' => "Minimum `age` is 18", 'key' => 'age']]
             ],
             [
-                ['age' => '17.999999'],['2001' => "Minimum `age` is 18"]
+                ['age' => '17'],[['code' => 2000, 'message' => "Minimum `age` is 18", 'key' => 'age']]
             ],
             [
-                ['age' => '100'],['2002' => "Maximum `age` is 99"]
+                ['age' => 100],[['code' => 2000, 'message' => "Maximum `age` is 99", 'key' => 'age']]
             ]
         ];
     }

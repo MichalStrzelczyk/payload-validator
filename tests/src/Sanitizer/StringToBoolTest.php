@@ -11,7 +11,7 @@ final class StringToBoolTest extends TestCase
      */
     public function testToStringToBool($dataProvider): void
     {
-        $this->assertTrue(\PayloadValidator\Sanitizer\StringToBool::sanitize($dataProvider));
+        $this->assertTrue(\Miinto\PayloadValidator\Sanitizer\StringToBool::sanitize($dataProvider));
     }
 
     /**
@@ -20,7 +20,8 @@ final class StringToBoolTest extends TestCase
     public function data()
     {
         return [
-            ["true",'true',true, 'notEmptyString', 1, '1', "1"]
+            ["true"],
+            ['true']
         ];
     }
 }

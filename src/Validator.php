@@ -2,16 +2,47 @@
 
 declare (strict_types=1);
 
-namespace PayloadValidator;
+namespace Miinto\PayloadValidator;
 
 use \Opis\JsonSchema\ISchema;
 use \Opis\JsonSchema\ISchemaLoader;
+use \Opis\JsonSchema\IValidatorHelper;
+use \Opis\JsonSchema\IFormatContainer;
+use \Opis\JsonSchema\IFilterContainer;
+use \Opis\JsonSchema\IMediaTypeContainer;
 use \Opis\JsonSchema\ValidationResult;
+use \Opis\JsonSchema\ValidationError;
+use \Miinto\PayloadValidator\Dto\Factory as DtoFactory;
 
 class Validator extends \Opis\JsonSchema\Validator
 {
+    CONST ERROR_TYPE_REQUIRED = 'required';
+    CONST ERROR_CODE_REQUIRED = 1000;
+    CONST ERROR_MESSAGE_REQUIRED = 'The parameter `%` is required.';
+
     /** @var array */
     protected $errorContainer = [];
+
+    /**
+     * Validator constructor.
+     * @param IValidatorHelper|null $helper
+     * @param ISchemaLoader|null $loader
+     * @param IFormatContainer|null $formats
+     * @param IFilterContainer|null $filters
+     * @param IMediaTypeContainer|null $media
+     */
+    public function __construct(
+        IValidatorHelper $helper = null,
+        ISchemaLoader $loader = null,
+        IFormatContainer $formats = null,
+        IFilterContainer $filters = null,
+        IMediaTypeContainer $media = null,
+        DtoFactory $dtoFactory = null
+    ) {
+        parent::__construct($helper, $loader, $formats, $filters, $media);
+        $this->dtoFactory = $dtoFactory ?? new DtoFactory();
+    }
+
 
     /**
      * @return array
@@ -36,42 +67,61 @@ class Validator extends \Opis\JsonSchema\Validator
         ISchemaLoader $loader = null
     ): ValidationResult {
         $this->sanitize($data, $schema);
-        $bug = parent::schemaValidation($data, $schema, $max_errors, $loader);
+        $validationResult = parent::schemaValidation($data, $schema, $max_errors, $loader);
 
         $this->errorContainer = [];
-        if ($bug->isValid() === false) {
-            $errors = $bug->getErrors();
+        if ($validationResult->isValid() === false) {
+            $errors = $validationResult->getErrors();
             foreach ($errors as $error) {
                 $errorType = $error->keyword();
 
-                if ($errorType === 'required') {
+                if ($errorType === self::ERROR_TYPE_REQUIRED) {
                     $name = $error->keywordArgs()['missing'];
                 } else {
                     $name = $error->dataPointer()[0];
                 }
 
-                if (isset($schema->resolve()->properties->{$name})) {
-                    $fieldError = (array)$schema->resolve()->properties->{$name}->errorMessages->{$error->keyword()};
-                } else {
-                    // Field is marked as a required but is not defined
-                    $fieldError = [
-                        $error->keyword() => $name
-                    ];
-                }
-                $this->errorContainer += $fieldError;
+                $this->errorContainer[] = $this->getErrorData($name, $schema, $error);
             }
         }
 
-        return $bug;
+        return $validationResult;
     }
 
     /**
-     * @param array $requestParameters
+     * @param string $name
+     * @param ISchema $schema
+     * @param ValidationError $error
+     *
+     * @return array
+     */
+    private function getErrorData(string $name, ISchema $schema, ValidationError $error): array
+    {
+        if (isset($schema->resolve()->properties->{$name})) {
+            $result = $schema->resolve()->properties->{$name}->errorMessages->{$error->keyword()};
+            $errorCode = $result->code;
+            $errorMessage = $result->message;
+        } else {
+            $errorCode = self::ERROR_CODE_REQUIRED;
+            $errorMessage = \sprintf(self::ERROR_MESSAGE_REQUIRED, $name);
+        }
+
+        $errorEntry = $this->dtoFactory->createErrorEntry(
+            $errorCode,
+            $errorMessage,
+            $name
+        );
+
+        return $errorEntry->toArray();
+    }
+
+    /**
+     * @param object $requestParameters
      * @param ISchema $schema
      *
      * @return array
      */
-    public function sanitize($requestParameters, ISchema $schema): object
+    public function sanitize(object $requestParameters, ISchema $schema): object
     {
         $properties = \get_object_vars($requestParameters);
 
@@ -84,7 +134,7 @@ class Validator extends \Opis\JsonSchema\Validator
             foreach ($sanitizers as $sanitizerName) {
                 $sanitizerClassName = (\class_exists(
                     $sanitizerName
-                )) ? $sanitizerName : '\PayloadValidator\Sanitizer\\' . \ucfirst($sanitizerName);
+                )) ? $sanitizerName : '\Miinto\PayloadValidator\Sanitizer\\' . \ucfirst($sanitizerName);
 
                 if (!\class_exists($sanitizerClassName)) {
                     throw new \RuntimeException('Class: ' . $sanitizerClassName . ' doesn\'t exist');

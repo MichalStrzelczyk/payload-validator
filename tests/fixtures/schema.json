@@ -1,6 +1,5 @@
 {
   "type": "object",
-  "$filters": "myFilter",
   "properties": {
     "age": {
       "type": "integer",
@@ -12,13 +11,16 @@
       ],
       "errorMessages": {
         "type": {
-          "2000": "Parameter `age` should be numerical"
+          "code": 2000,
+          "message": "Parameter `age` should be numerical"
         },
         "minimum": {
-          "2001": "Minimum `age` is 18"
+          "code": 2000,
+          "message": "Minimum `age` is 18"
         },
         "maximum": {
-          "2002": "Maximum `age` is 99"
+          "code": 2000,
+          "message": "Maximum `age` is 99"
         }
       }
     }

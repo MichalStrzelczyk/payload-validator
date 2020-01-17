@@ -2,7 +2,7 @@
 
 declare (strict_types=1);
 
-namespace PayloadValidator\Schema;
+namespace Miinto\PayloadValidator\Schema;
 
 use \Opis\JsonSchema\ISchema;
 use \Opis\JsonSchema\Schema;

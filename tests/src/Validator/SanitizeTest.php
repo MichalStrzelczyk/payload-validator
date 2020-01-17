@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SanitizeTest extends TestCase
 {
-    /** @var \PayloadValidator\Validator */
+    /** @var \Miinto\PayloadValidator\Validator */
     protected $validator;
 
     /** @var \Opis\JsonSchema\ISchema */
@@ -14,9 +14,9 @@ final class SanitizeTest extends TestCase
 
     public function setUp(): void
     {
-        $this->validator = (new \PayloadValidator\Validator\Factory())->create();
+        $this->validator = (new \Miinto\PayloadValidator\Validator\Factory())->create();
         $schema = \json_decode(\file_get_contents(FIXTURES_PATH . '/schema.json'), true);
-        $this->schema = (new \PayloadValidator\Schema\Factory())->createFromArray($schema);
+        $this->schema = (new \Miinto\PayloadValidator\Schema\Factory())->createFromArray($schema);
     }
 
     /**
@@ -24,8 +24,8 @@ final class SanitizeTest extends TestCase
      */
     public function testSanitizeMethod($testData, $expectedData): void
     {
-        $dataAfterSanitiziting = $this->validator->sanitize((object) $testData, $this->schema);
-        $this->assertEquals(\serialize((object) $expectedData), \serialize($dataAfterSanitiziting));
+        $dataAfterSanitizing = $this->validator->sanitize((object) $testData, $this->schema);
+        $this->assertEquals(\serialize((object) $expectedData), \serialize($dataAfterSanitizing));
     }
 
     /**
@@ -47,15 +47,15 @@ final class SanitizeTest extends TestCase
                     'age' => '11testtest'
                 ],
                 [
-                    'age' => 11
+                    'age' => false
                 ],
             ],
             [
                 [
-                    'age' => '-12'
+                    'age' => '-14'
                 ],
                 [
-                    'age' => -12
+                    'age' => -14
                 ],
             ],
             [
@@ -63,15 +63,7 @@ final class SanitizeTest extends TestCase
                     'age' => -12.51
                 ],
                 [
-                    'age' => -12
-                ],
-            ],
-            [
-                [
-                    'age' => -12.49
-                ],
-                [
-                    'age' => -12
+                    'age' => false
                 ],
             ]
         ];
