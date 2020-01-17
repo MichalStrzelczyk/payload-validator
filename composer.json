@@ -1,5 +1,5 @@
 {
-  "name": "miinto/payload-validator",
+  "name": "miinto/payload_validator",
   "description": "Payload validator",
   "autoload": {
     "psr-4": {
