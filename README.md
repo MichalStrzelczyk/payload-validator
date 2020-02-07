@@ -9,15 +9,15 @@ Important links:
 - JSON Schema https://json-schema.org/
 - Documentation of `opis/json-schema` package https://docs.opis.io/json-schema/1.x/
 
-## Installation
+## 1 Installation
 
 ```
 composer install miinto/payload_validator
 ```
 
-## Usage
+## 2 Usage
 
-### 1. Variable sanitizing - query string parameters case
+### 2.1 Variable sanitizing - query string parameters case
 
 As you know all query parameters are assigned as a string type. We are not able to validate these parameters using  
 basic validators from the `opis/json-schema` library. To do this you need to add `sanitizers` section in the json 
@@ -59,7 +59,7 @@ class must implement `\PayloadValidator\Sanitizer\SanitizerInterface`.
 }         
 ```
 
-### 2. Error messages customization
+### 2.2 Error messages customization
 
 One variable can assign many validators and for each of them you can define a custom error message. To do this you 
 should add `errorMessages` key in your schema like this:
